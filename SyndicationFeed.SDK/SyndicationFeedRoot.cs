@@ -7,29 +7,48 @@ namespace SyndicationFeed.SDK
 {
     public class SyndicationFeedRoot
     {
-        readonly WebHelper helper;
+        readonly RestHelper helper;
 
         public SyndicationFeedRoot(Uri uri, int port)
         {
-            helper = new WebHelper(uri, port);
+            helper = new RestHelper(uri, port);
         }
 
-        public async Task<List<Collection>> GetAllCollections()
+        public async Task<List<SdkCollection>> GetAllCollections()
         {
             // GET collections
-            return await helper.GetAsync<List<Collection>>("collections");
+            var list = await helper.GetAsync<List<SdkCollection>>("collections");
+            foreach (var coll in list)
+                coll.helper = helper;
+            return list;
         }
 
-        public async Task<Collection> GetCollection(long id)
+        public async Task<SdkCollection> GetCollection(long id)
         {
             // GET collections/{id}
-            return await helper.GetAsync<Collection>($"collections/{id}");
+            var coll = await helper.GetAsync<SdkCollection>($"collections/{id}");
+            coll.helper = helper;
+            return coll;
         }
 
-        public async Task<Collection> AddCollection(string name)
+        public async Task<SdkCollection> AddCollection(string name)
         {
             // PUT collections
-            return await helper.PutAsync<string, Collection>("collections", name);
+            var coll = await helper.PutAsync<string, SdkCollection>("collections", name);
+            coll.helper = helper;
+            return coll;
+        }
+
+        public async Task DeleteCollection(long id)
+        {
+            // DELETE collections/1
+            await helper.DeleteAsync($"collections/{id}");
+        }
+
+        public async Task<List<long>> GetCollectionIds()
+        {
+            // GET collections/ids
+            return await helper.GetAsync<List<long>>("collections/ids");
         }
     }
 }
