@@ -20,7 +20,7 @@
     "SyndicationFeed": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/collections",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
