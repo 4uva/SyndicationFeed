@@ -60,7 +60,7 @@ namespace SyndicationFeed.Controllers
                 Type = FeedType.Syndicated,
                 Publications = syndicatedPublications
             };
-            
+
             return Ok(syndicatedFeed);
         }
 

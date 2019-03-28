@@ -8,6 +8,7 @@ namespace SyndicationFeed.Common.Models
     public enum FeedType
     {
         Rss,
-        Atom
+        Atom,
+        Syndicated
     }
 }
