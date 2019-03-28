@@ -56,6 +56,15 @@ namespace SyndicationFeed.Controllers
                 return NotFound();
         }
 
+        // GET api/collections/ids
+        [HttpGet("ids")]
+        public ActionResult<List<long>> GetIds()
+        {
+            var collections = repository.GetAllCollections();
+            var ids = collections.Select(coll => coll.Id).ToList();
+            return Ok(ids);
+        }
+
         readonly Repository repository;
     }
 }
