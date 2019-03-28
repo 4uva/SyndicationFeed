@@ -10,18 +10,18 @@ namespace SyndicationFeed.SDK
     {
         internal RestHelper helper;
 
-        string Prefix => $"collections/{Id}/feeds";
+        string AddressPrefix => $"collections/{Id}/feeds";
 
         public async Task<Feed> GetSyndicatedFeed()
         {
             // GET collections/1/feeds/all
-            return await helper.GetAsync<Feed>($"{Prefix}/all");
+            return await helper.GetAsync<Feed>($"{AddressPrefix}/all");
         }
 
         public async Task<Feed> GetFeed(long feedId)
         {
             // GET collections/1/feeds/all
-            return await helper.GetAsync<Feed>($"{Prefix}/{feedId}");
+            return await helper.GetAsync<Feed>($"{AddressPrefix}/{feedId}");
         }
 
         public async Task<Feed> AddFeed(FeedType type, Uri uri)
@@ -32,19 +32,19 @@ namespace SyndicationFeed.SDK
                 Type = type,
                 SourceAddress = uri
             };
-            return await helper.PutAsync<Feed, Feed>(Prefix, newFeed);
+            return await helper.PutAsync<Feed, Feed>(AddressPrefix, newFeed);
         }
 
         public async Task DeleteFeed(long feedId)
         {
             // DELETE collections/1/feeds/1
-            await helper.DeleteAsync($"{Prefix}/{feedId}");
+            await helper.DeleteAsync($"{AddressPrefix}/{feedId}");
         }
 
         public async Task<List<long>> GetFeedIds()
         {
             // GET collections/1/feeds/ids
-            return await helper.GetAsync<List<long>>($"{Prefix}/ids");
+            return await helper.GetAsync<List<long>>($"{AddressPrefix}/ids");
         }
     }
 }
