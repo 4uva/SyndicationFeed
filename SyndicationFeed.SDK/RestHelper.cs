@@ -7,17 +7,20 @@ using System.Threading.Tasks;
 
 namespace SyndicationFeed.SDK
 {
-    class WebHelper
+    // implemented after the official Microsoft's example:
+    // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
+    class RestHelper
     {
         HttpClient client;
 
-        public WebHelper(Uri uri, int port)
+        public RestHelper(Uri uri, int port)
         {
             var builder = new UriBuilder(uri)
             {
                 Port = port,
                 Path = "api/"
             };
+
             client = new HttpClient() { BaseAddress = builder.Uri };
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
@@ -39,6 +42,12 @@ namespace SyndicationFeed.SDK
             response.EnsureSuccessStatusCode();
 
             return await GetAsync<TReceive>(response.Headers.Location.ToString());
+        }
+
+        public async Task DeleteAsync(string webApiAddress)
+        {
+            HttpResponseMessage response = await client.DeleteAsync(webApiAddress);
+            response.EnsureSuccessStatusCode();
         }
     }
 }
