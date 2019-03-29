@@ -15,13 +15,13 @@ namespace SyndicationFeed.SDK
         public async Task<Feed> GetTotalFeed()
         {
             // GET collections/1/feeds/all
-            return await helper.GetAsync<Feed>($"{AddressPrefix}/all");
+            return await helper.GetAsync<Feed>($"{AddressPrefix}/all", nameof(Id));
         }
 
         public async Task<Feed> GetFeed(long feedId)
         {
             // GET collections/1/feeds/all
-            return await helper.GetAsync<Feed>($"{AddressPrefix}/{feedId}");
+            return await helper.GetAsync<Feed>($"{AddressPrefix}/{feedId}", nameof(feedId));
         }
 
         public async Task<Feed> AddFeed(FeedType type, Uri uri)
@@ -49,7 +49,7 @@ namespace SyndicationFeed.SDK
         public async Task<List<long>> GetFeedIds()
         {
             // GET collections/1/feeds/ids
-            return await helper.GetAsync<List<long>>($"{AddressPrefix}/ids");
+            return await helper.GetAsync<List<long>>($"{AddressPrefix}/ids", nameof(Id));
         }
     }
 }
