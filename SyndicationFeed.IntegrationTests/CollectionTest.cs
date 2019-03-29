@@ -56,7 +56,6 @@ namespace SyndicationFeed.IntegrationTests
 
             Assert.Contains(id2, ids);
             Assert.DoesNotContain(id1, ids);
-
         }
 
         [Fact]
