@@ -34,7 +34,7 @@ namespace SyndicationFeed.SDK
             return await response.Content.ReadAsAsync<T>();
         }
 
-        public async Task<TReceive> PutAsync<TSend, TReceive>(
+        public async Task<TReceive> PostAsync<TSend, TReceive>(
             string webApiAddress, TSend obj)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync(

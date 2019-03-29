@@ -32,7 +32,7 @@ namespace SyndicationFeed.SDK
                 Type = type,
                 SourceAddress = uri
             };
-            return await helper.PutAsync<Feed, Feed>(AddressPrefix, newFeed);
+            return await helper.PostAsync<Feed, Feed>(AddressPrefix, newFeed);
         }
 
         public async Task DeleteFeed(long feedId)

@@ -34,7 +34,7 @@ namespace SyndicationFeed.SDK
         public async Task<SdkCollection> AddCollection(string name)
         {
             // PUT collections
-            var coll = await helper.PutAsync<string, SdkCollection>("collections", name);
+            var coll = await helper.PostAsync<string, SdkCollection>("collections", name);
             coll.helper = helper;
             return coll;
         }
