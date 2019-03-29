@@ -42,36 +42,36 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections/1/feeds/all
         [HttpGet("all")]
-        public ActionResult<Feed> GetSyndicated(long collid)
+        public ActionResult<Feed> GetTotal(long collid)
         {
             var feeds = repository.TryFindFeeds(collid);
             if (feeds == null)
                 return NotFound($"Collection id {collid} doesn't exist");
 
-            var syndicatedPublications = new List<Publication>();
+            var allPublications = new List<Publication>();
             foreach (var feed in feeds)
-                syndicatedPublications.AddRange(feed.Publications);
-            syndicatedPublications.Sort(CompareHelper.ComparePublicationsByDate);
+                allPublications.AddRange(feed.Publications);
+            allPublications.Sort(CompareHelper.ComparePublicationsByDate);
 
-            var syndicatedFeed = new Feed()
+            var totalFeed = new Feed()
             {
                 Id = -1,
                 SourceAddress = null,
-                Type = FeedType.Syndicated,
-                Publications = syndicatedPublications
+                Type = FeedType.Virtual,
+                Publications = allPublications
             };
 
-            return Ok(syndicatedFeed);
+            return Ok(totalFeed);
         }
 
         // POST api/collections/1/feeds
         [HttpPost]
         public ActionResult<Feed> Post(long collid, [FromBody] Feed feed)
         {
-            if (feed.Type == FeedType.Syndicated)
+            if (feed.Type == FeedType.Virtual)
             {
                 // report an error
-                return BadRequest("Cannot add syndicated feed");
+                return BadRequest("Cannot add virtual feed");
             }
             var newFeed = repository.AddNewFeed(collid, feed.Type, feed.SourceAddress);
             return CreatedAtAction(nameof(Get), new { collid, id = newFeed.Id }, newFeed);

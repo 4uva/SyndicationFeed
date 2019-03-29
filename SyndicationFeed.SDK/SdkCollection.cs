@@ -12,7 +12,7 @@ namespace SyndicationFeed.SDK
 
         string AddressPrefix => $"collections/{Id}/feeds";
 
-        public async Task<Feed> GetSyndicatedFeed()
+        public async Task<Feed> GetTotalFeed()
         {
             // GET collections/1/feeds/all
             return await helper.GetAsync<Feed>($"{AddressPrefix}/all");
@@ -26,8 +26,8 @@ namespace SyndicationFeed.SDK
 
         public async Task<Feed> AddFeed(FeedType type, Uri uri)
         {
-            if (type == FeedType.Syndicated)
-                throw new ArgumentOutOfRangeException(nameof(type), "Cannot created Syndicated feed");
+            if (type == FeedType.Virtual)
+                throw new ArgumentOutOfRangeException(nameof(type), "Cannot add virtual feed");
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
 

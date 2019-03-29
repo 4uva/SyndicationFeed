@@ -9,6 +9,6 @@ namespace SyndicationFeed.Common.Models
     {
         Rss,
         Atom,
-        Syndicated
+        Virtual
     }
 }
