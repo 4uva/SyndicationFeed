@@ -26,6 +26,6 @@ Plus will be:
 [ ] Authentication
 [ ] Persistence
 [ ] Logging
-[ ] Tests
+[x] Tests
 
 Projects will be tested on latest Visual Studio 2017 Community/Pro with Core and Web tools installed.

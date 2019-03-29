@@ -31,10 +31,10 @@ namespace SyndicationFeed.TestApp
             var feed2 = await coll.AddFeed(
                 FeedType.Rss, new Uri("https://educationblog.microsoft.com/feed"));
 
-            Console.WriteLine("Obtaining syndicated feed");
-            var commonFeed = await coll.GetSyndicatedFeed();
+            Console.WriteLine("Obtaining total feed");
+            var totalFeed = await coll.GetTotalFeed();
             Console.WriteLine("Obtained:");
-            DisplayFeed(commonFeed);
+            DisplayFeed(totalFeed);
 
             Console.WriteLine("Removing feed 1");
             await coll.DeleteFeed(feed1.Id);
