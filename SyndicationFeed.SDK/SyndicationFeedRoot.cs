@@ -26,13 +26,16 @@ namespace SyndicationFeed.SDK
         public async Task<SdkCollection> GetCollection(long id)
         {
             // GET collections/{id}
-            var coll = await helper.GetAsync<SdkCollection>($"collections/{id}");
+            var coll = await helper.GetAsync<SdkCollection>($"collections/{id}", nameof(id));
             coll.helper = helper;
             return coll;
         }
 
         public async Task<SdkCollection> AddCollection(string name)
         {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
             // PUT collections
             var coll = await helper.PostAsync<string, SdkCollection>("collections", name);
             coll.helper = helper;
@@ -42,7 +45,7 @@ namespace SyndicationFeed.SDK
         public async Task DeleteCollection(long id)
         {
             // DELETE collections/1
-            await helper.DeleteAsync($"collections/{id}");
+            await helper.DeleteAsync($"collections/{id}", nameof(id));
         }
 
         public async Task<List<long>> GetCollectionIds()

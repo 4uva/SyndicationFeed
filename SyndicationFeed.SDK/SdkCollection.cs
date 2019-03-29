@@ -26,6 +26,11 @@ namespace SyndicationFeed.SDK
 
         public async Task<Feed> AddFeed(FeedType type, Uri uri)
         {
+            if (type == FeedType.Syndicated)
+                throw new ArgumentOutOfRangeException(nameof(type), "Cannot created Syndicated feed");
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+
             // PUT collections/1/feeds
             var newFeed = new Feed()
             {
@@ -38,7 +43,7 @@ namespace SyndicationFeed.SDK
         public async Task DeleteFeed(long feedId)
         {
             // DELETE collections/1/feeds/1
-            await helper.DeleteAsync($"{AddressPrefix}/{feedId}");
+            await helper.DeleteAsync($"{AddressPrefix}/{feedId}", nameof(feedId));
         }
 
         public async Task<List<long>> GetFeedIds()
