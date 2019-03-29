@@ -26,7 +26,7 @@ namespace SyndicationFeed.Controllers
             if (feeds != null)
                 return Ok(feeds);
             else
-                return NotFound();
+                return NotFound($"Collection id {collid} doesn't exist");
         }
 
         // GET api/collections/1/feeds/5
@@ -37,7 +37,7 @@ namespace SyndicationFeed.Controllers
             if (feed != null)
                 return Ok(feed);
             else
-                return NotFound();
+                return NotFound($"Collection id {collid} or feed id {id} doesn't exist");
         }
 
         // GET api/collections/1/feeds/all
@@ -46,7 +46,7 @@ namespace SyndicationFeed.Controllers
         {
             var feeds = repository.TryFindFeeds(collid);
             if (feeds == null)
-                return NotFound();
+                return NotFound($"Collection id {collid} doesn't exist");
 
             var syndicatedPublications = new List<Publication>();
             foreach (var feed in feeds)
@@ -84,7 +84,7 @@ namespace SyndicationFeed.Controllers
             if (repository.TryRemoveFeed(collid, id))
                 return NoContent();
             else
-                return NotFound();
+                return NotFound($"Collection id {collid} or feed id {id} doesn't exist");
         }
 
         // GET api/collections/1/feeds/ids

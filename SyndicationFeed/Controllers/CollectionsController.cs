@@ -35,7 +35,7 @@ namespace SyndicationFeed.Controllers
             if (item != null)
                 return item;
             else
-                return NotFound();
+                return NotFound($"Collection id {id} doesn't exist");
         }
 
         // POST api/collections
@@ -53,7 +53,7 @@ namespace SyndicationFeed.Controllers
             if (repository.TryRemoveCollection(id))
                 return NoContent();
             else
-                return NotFound();
+                return NotFound($"Collection id {id} doesn't exist");
         }
 
         // GET api/collections/ids
