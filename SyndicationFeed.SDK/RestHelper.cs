@@ -22,6 +22,18 @@ namespace SyndicationFeed.SDK
             };
 
             client = new HttpClient() { BaseAddress = builder.Uri };
+            SetupClient();
+        }
+
+        public RestHelper(HttpClient client)
+        {
+            this.client = client;
+            client.BaseAddress = new Uri(client.BaseAddress, "api/");
+            SetupClient();
+        }
+
+        void SetupClient()
+        {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -65,7 +77,7 @@ namespace SyndicationFeed.SDK
             sendResponse.EnsureSuccessStatusCode();
 
             var receiveAddress = sendResponse.Headers.Location.ToString();
-            HttpResponseMessage receiveResponse = await client.GetAsync(webApiAddress);
+            HttpResponseMessage receiveResponse = await client.GetAsync(receiveAddress);
             if (receiveResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
                 throw new InvalidOperationException("object deleted before fetching");
             receiveResponse.EnsureSuccessStatusCode();

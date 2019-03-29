@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using SyndicationFeed.Common.Models;
 
@@ -12,6 +13,11 @@ namespace SyndicationFeed.SDK
         public SyndicationFeedRoot(Uri uri, int port)
         {
             helper = new RestHelper(uri, port);
+        }
+
+        public SyndicationFeedRoot(HttpClient client)
+        {
+            helper = new RestHelper(client);
         }
 
         public async Task<List<SdkCollection>> GetAllCollections()
