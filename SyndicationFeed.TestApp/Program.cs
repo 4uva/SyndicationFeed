@@ -15,70 +15,29 @@ namespace SyndicationFeed.TestApp
             var port = 44301;
             var root = new SyndicationFeedRoot(uri, port);
 
-            var initialCollections = await root.GetAllCollections();
-            Console.WriteLine("Initial collections: ");
-            DisplayCollections(initialCollections);
-
             Console.WriteLine("Adding a sample collection");
-            var coll1 = await root.AddCollection("Sample");
-            var id1 = coll1.Id;
-            Console.WriteLine("Obtained back collection:");
-            DisplayCollection(coll1);
+            var coll = await root.AddCollection("Sample");
+            var id1 = coll.Id;
 
-            Console.WriteLine("Adding another collection");
-            var coll2 = await root.AddCollection("Sample 2");
-            var id2 = coll2.Id;
-            Console.WriteLine("Obtained back collection:");
-            DisplayCollection(coll2);
+            var allCollections = await root.GetAllCollections();
+            Console.WriteLine("Collections:");
+            DisplayCollections(allCollections);
 
-            Console.WriteLine("Deleting first collection");
-            await root.DeleteCollection(id1);
-
-            Console.WriteLine("Obtaining ids");
-            var ids = await root.GetCollectionIds();
-
-            if (!ids.Contains(id2))
-                Console.WriteLine("Unexpected: all indices don't contain added index");
-            if (ids.Contains(id1))
-                Console.WriteLine("Unexpected: all indices contain deleted index");
-
-            var updatedCollections = await root.GetAllCollections();
-            Console.WriteLine("Updated collections: ");
-            DisplayCollections(updatedCollections);
-
-            Console.WriteLine("Getting collections one by one:");
-            foreach (var id in ids)
-            {
-                var coll = await root.GetCollection(id);
-                DisplayCollection(coll);
-            }
-
-            // now, coll2 should be present
             Console.WriteLine("Adding feed 1");
-            var feed1 = await coll2.AddFeed(
+            var feed1 = await coll.AddFeed(
                 FeedType.Rss, new Uri("https://blogs.microsoft.com/feed/"));
-            Console.WriteLine("Obtained back:");
-            DisplayFeed(feed1);
 
             Console.WriteLine("Adding feed 2");
-            var feed2 = await coll2.AddFeed(
+            var feed2 = await coll.AddFeed(
                 FeedType.Rss, new Uri("https://educationblog.microsoft.com/feed"));
-            Console.WriteLine("Obtained back:");
-            DisplayFeed(feed2);
-
-            Console.WriteLine("Adding feed 3");
-            var feed3 = await coll2.AddFeed(
-                FeedType.Rss, new Uri("https://www.reddit.com/r/microsoft/.rss?format=xml"));
-            Console.WriteLine("Obtained back:");
-            DisplayFeed(feed3);
-
-            Console.WriteLine("Removing feed 1");
-            await coll2.DeleteFeed(feed1.Id);
 
             Console.WriteLine("Obtaining syndicated feed");
-            var commonFeed = await coll2.GetSyndicatedFeed();
+            var commonFeed = await coll.GetSyndicatedFeed();
             Console.WriteLine("Obtained:");
             DisplayFeed(commonFeed);
+
+            Console.WriteLine("Removing feed 1");
+            await coll.DeleteFeed(feed1.Id);
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey(false);
