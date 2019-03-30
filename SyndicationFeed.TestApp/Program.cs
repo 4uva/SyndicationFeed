@@ -23,13 +23,20 @@ namespace SyndicationFeed.TestApp
             Console.WriteLine("Collections:");
             DisplayCollections(allCollections);
 
-            Console.WriteLine("Adding feed 1");
-            var feed1 = await coll.AddFeed(
-                FeedType.Rss, new Uri("https://blogs.microsoft.com/feed/"));
+            var addresses = new[]
+            {
+                new Uri("https://blogs.microsoft.com/feed/"),
+                new Uri("https://news.microsoft.com/feed/"),
+                new Uri("https://educationblog.microsoft.com/feed")
+            };
 
-            Console.WriteLine("Adding feed 2");
-            var feed2 = await coll.AddFeed(
-                FeedType.Rss, new Uri("https://educationblog.microsoft.com/feed"));
+            Console.WriteLine("Adding feeds");
+            List<Feed> feeds = new List<Feed>();
+            foreach (var address in addresses)
+            {
+                var feed = await coll.AddFeed(FeedType.Rss, address);
+                feeds.Add(feed);
+            }
 
             Console.WriteLine("Obtaining total feed");
             var totalFeed = await coll.GetTotalFeed();
@@ -37,7 +44,7 @@ namespace SyndicationFeed.TestApp
             DisplayFeed(totalFeed);
 
             Console.WriteLine("Removing feed 1");
-            await coll.DeleteFeed(feed1.Id);
+            await coll.DeleteFeed(feeds[0].Id);
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey(false);
