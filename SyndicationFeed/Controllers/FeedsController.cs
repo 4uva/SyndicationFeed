@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SyndicationFeed.Models.Storage;
 using SyndicationFeed.Common.Models;
+using System.Threading.Tasks;
 
 namespace SyndicationFeed.Controllers
 {
@@ -20,9 +21,9 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections/1/feeds
         [HttpGet]
-        public ActionResult<IEnumerable<Feed>> Get(long collid)
+        public async Task<ActionResult<IEnumerable<Feed>>> Get(long collid)
         {
-            var feeds = repository.TryFindFeeds(collid);
+            var feeds = await repository.TryFindFeedsAsync(collid);
             if (feeds != null)
                 return Ok(feeds);
             else
@@ -31,9 +32,9 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections/1/feeds/5
         [HttpGet("{id}")]
-        public ActionResult<Feed> Get(long collid, long id)
+        public async Task<ActionResult<Feed>> Get(long collid, long id)
         {
-            var feed = repository.TryFindFeed(collid, id);
+            var feed = await repository.TryFindFeedAsync(collid, id);
             if (feed != null)
                 return Ok(feed);
             else
@@ -42,9 +43,9 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections/1/feeds/all
         [HttpGet("all")]
-        public ActionResult<Feed> GetTotal(long collid)
+        public async Task<ActionResult<Feed>> GetTotal(long collid)
         {
-            var feeds = repository.TryFindFeeds(collid);
+            var feeds = await repository.TryFindFeedsAsync(collid);
             if (feeds == null)
                 return NotFound($"Collection id {collid} doesn't exist");
 
@@ -66,14 +67,14 @@ namespace SyndicationFeed.Controllers
 
         // POST api/collections/1/feeds
         [HttpPost]
-        public ActionResult<Feed> Post(long collid, [FromBody] Feed feed)
+        public async Task<ActionResult<Feed>> Post(long collid, [FromBody] Feed feed)
         {
             if (feed.Type == FeedType.Virtual)
             {
                 // report an error
                 return BadRequest("Cannot add virtual feed");
             }
-            var newFeed = repository.AddNewFeed(collid, feed.Type, feed.SourceAddress);
+            var newFeed = await repository.AddNewFeedAsync(collid, feed.Type, feed.SourceAddress);
             return CreatedAtAction(nameof(Get), new { collid, id = newFeed.Id }, newFeed);
         }
 
@@ -89,9 +90,9 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections/1/feeds/ids
         [HttpGet("ids")]
-        public ActionResult<List<long>> GetIds(long collid)
+        public async Task<ActionResult<List<long>>> GetIds(long collid)
         {
-            var feeds = repository.TryFindFeeds(collid);
+            var feeds = await repository.TryFindFeedsAsync(collid);
             if (feeds == null)
                 return NotFound();
 

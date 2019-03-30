@@ -43,14 +43,16 @@ namespace SyndicationFeed.Models.Storage
             return collections.Remove(coll); // true if found, false if not
         }
 
-        public IEnumerable<Feed> TryFindFeeds(long collid)
+        public async Task<IEnumerable<Feed>> TryFindFeedsAsync(long collid)
         {
             var coll = TryFindCollectionInternal(collid);
             if (coll != null)
             {
                 var feeds = coll.Feeds;
-                foreach (var feed in feeds)
-                    feedExpander.Expand(feed);
+                var feedExpandTasks = new List<Task>();
+                foreach (var feed in feeds) // simultaneously
+                    feedExpandTasks.Add(feedExpander.ExpandAsync(feed));
+                await Task.WhenAll(feedExpandTasks);
                 return feeds;
             }
             else
@@ -59,14 +61,14 @@ namespace SyndicationFeed.Models.Storage
             }
         }
 
-        public Feed TryFindFeed(long collid, long id)
+        public async Task<Feed> TryFindFeedAsync(long collid, long id)
         {
             var coll = TryFindCollectionInternal(collid);
             if (coll != null)
             {
                 var feed = coll.Feeds.SingleOrDefault(f => f.Id == id);
                 if (feed != null)
-                    feedExpander.Expand(feed);
+                    await feedExpander.ExpandAsync(feed);
                 return feed;
             }
             else
@@ -75,7 +77,7 @@ namespace SyndicationFeed.Models.Storage
             }
         }
 
-        public Feed AddNewFeed(long collid, FeedType type, Uri uri)
+        public async Task<Feed> AddNewFeedAsync(long collid, FeedType type, Uri uri)
         {
             var coll = TryFindCollectionInternal(collid); 
             if (coll == null)
@@ -90,9 +92,10 @@ namespace SyndicationFeed.Models.Storage
                 SourceAddress = uri,
                 Publications = new List<Publication>(),
                 LastDownloadTime = DateTime.MinValue,
-                ValidTill = DateTime.MinValue
+                ValidTill = DateTime.MinValue,
+                LoadFailureMessage = null
             };
-            feedExpander.Expand(newFeed);
+            await feedExpander.ExpandAsync(newFeed);
             coll.Feeds.Add(newFeed);
             return newFeed;
         }

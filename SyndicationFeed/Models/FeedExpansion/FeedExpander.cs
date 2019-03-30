@@ -8,15 +8,15 @@ namespace SyndicationFeed.Models.FeedExpansion
 {
     public class FeedExpander
     {
-        public void Expand(FeedWithDownloadTime feed)
+        public async Task ExpandAsync(FeedWithDownloadTime feed)
         {
             switch (feed.Type)
             {
                 case FeedType.Rss:
-                    rssExpander.Expand(feed);
+                    await rssExpander.ExpandAsync(feed);
                     break;
                 case FeedType.Atom:
-                    atomExpander.Expand(feed);
+                    await atomExpander.ExpandAsync(feed);
                     break;
                 default:
                     throw new ArgumentException($"Unknown feed type: {feed.Type}");
@@ -25,24 +25,5 @@ namespace SyndicationFeed.Models.FeedExpansion
 
         RssExpander rssExpander = new RssExpander();
         AtomExpander atomExpander = new AtomExpander();
-
-        //public FeedExpander()
-        //{
-        //    expandByFeedType = new Dictionary<FeedType, Action<Feed>>()
-        //    {
-        //        [FeedType.Rss] = rssExpander.Expand,
-        //        [FeedType.Atom] = atomExpander.Expand
-        //    };
-        //}
-        //
-        //public void Expand(Feed feed)
-        //{
-        //    if (!expandByFeedType.TryGetValue(feed.Type, out var concreteExpander))
-        //        concreteExpander(feed);
-        //    else
-        //        throw new ArgumentException($"Unknown feed type: {feed.Type}");
-        //}
-        //
-        //Dictionary<FeedType, Action<Feed>> expandByFeedType;
     }
 }

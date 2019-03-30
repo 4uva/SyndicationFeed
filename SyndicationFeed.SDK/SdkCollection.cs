@@ -31,7 +31,7 @@ namespace SyndicationFeed.SDK
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
 
-            // PUT collections/1/feeds
+            // POST collections/1/feeds
             var newFeed = new Feed()
             {
                 Type = type,

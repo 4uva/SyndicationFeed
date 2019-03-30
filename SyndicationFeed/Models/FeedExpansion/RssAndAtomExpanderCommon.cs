@@ -17,13 +17,7 @@ namespace SyndicationFeed.Models.FeedExpansion
 
         Cache cache = new Cache();
 
-        public void Expand(FeedWithDownloadTime feed)
-        {
-            // TODO: switch to async
-            ExpandAsync(feed).Wait();
-        }
-
-        async Task ExpandAsync(FeedWithDownloadTime feed)
+        public async Task ExpandAsync(FeedWithDownloadTime feed)
         {
             var uri = feed.SourceAddress;
 
