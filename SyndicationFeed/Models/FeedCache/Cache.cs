@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace SyndicationFeed.Models.FeedCache
 {
-    // TODO: run periodic cache clean-up
     public class Cache
     {
+        const int cleanupThreshold = 1000;
+        const int cleanupAmount = 100;
+
         object mutex = new object();
 
         Dictionary<Uri, FeedWithDownloadTime> feedsByUri =
@@ -44,7 +46,19 @@ namespace SyndicationFeed.Models.FeedCache
             lock (mutex)
             {
                 feedsByUri[uri] = cloneFeed;
+                if (feedsByUri.Count >= cleanupThreshold)
+                    RemoveMostObsolete(cleanupAmount);
             }
+        }
+
+        // called under lock
+        void RemoveMostObsolete(int cleanupAmount)
+        {
+            // sort by validity time
+            var obsoleteFeeds =
+                feedsByUri.Values.OrderBy(feed => feed.ValidTill).Take(cleanupAmount).ToList();
+            foreach (var feed in obsoleteFeeds)
+                feedsByUri.Remove(feed.SourceAddress);
         }
 
         public void UncacheFeed(FeedWithDownloadTime feed)
@@ -55,6 +69,5 @@ namespace SyndicationFeed.Models.FeedCache
                 feedsByUri.Remove(uri);
             }
         }
-
     }
 }
