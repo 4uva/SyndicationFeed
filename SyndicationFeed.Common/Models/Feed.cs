@@ -9,5 +9,6 @@ namespace SyndicationFeed.Common.Models
         public FeedType Type { get; set; }
         public Uri SourceAddress { get; set; }
         public List<Publication> Publications { get; set; }
+        public string LoadFailureMessage { get; set; }
     }
 }

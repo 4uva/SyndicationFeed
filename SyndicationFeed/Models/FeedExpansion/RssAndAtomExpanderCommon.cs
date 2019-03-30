@@ -26,38 +26,69 @@ namespace SyndicationFeed.Models.FeedExpansion
 
             string newContent = null;
             DateTime downloadTime = DateTime.UtcNow;
+            bool feedFailed = false;
             if (needRedownload)
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, uri);
-                if (cachedFeed != null)
-                    request.Headers.IfModifiedSince = cachedFeed.LastDownloadTime;
-                using (var response = await httpClient.GetAsync(uri))
+                try
                 {
-                    if (cachedFeed == null ||
-                        response.StatusCode != System.Net.HttpStatusCode.NotModified)
+                    var request = new HttpRequestMessage(HttpMethod.Get, uri);
+                    if (cachedFeed != null)
+                        request.Headers.IfModifiedSince = cachedFeed.LastDownloadTime;
+                    using (var response = await httpClient.GetAsync(uri))
                     {
-                        newContent = await response.Content.ReadAsStringAsync();
+                        if (cachedFeed == null ||
+                            response.StatusCode != System.Net.HttpStatusCode.NotModified)
+                        {
+                            newContent = await response.Content.ReadAsStringAsync();
+                        }
+                        // else there are old publications and content is not modified
+                        // so we can continue using it
                     }
-                    // else there are old publications and content is not modified
-                    // so we can continue using it
+                    feed.LoadFailureMessage = null;
+                }
+                catch (Exception ex)
+                {
+                    feed.LoadFailureMessage = $"Feed download failed: {ex.Message}";
+                    feedFailed = true;
                 }
             }
 
-            if (newContent != null)
+            if (!feedFailed)
             {
-                var publications = ExtractPublicationsFromContent(newContent);
-                feed.Publications = publications;
-                feed.LastDownloadTime = downloadTime;
-                feed.ValidTill = downloadTime + defaultExpiryTime;
+                if (newContent != null)
+                {
+                    try
+                    {
+                        var publications = ExtractPublicationsFromContent(newContent);
+                        feed.Publications = publications;
+                        feed.LastDownloadTime = downloadTime;
+                        feed.ValidTill = downloadTime + defaultExpiryTime;
+                    }
+                    catch (Exception ex)
+                    {
+                        feed.LoadFailureMessage = $"Feed extraction failed: {ex.Message}";
+                        feedFailed = true;
+                    }
+                }
+                else
+                {
+                    // no new content so we have cached feed
+                    feed.Publications = cachedFeed.Publications;
+                    feed.LastDownloadTime = cachedFeed.LastDownloadTime;
+                    feed.ValidTill = cachedFeed.ValidTill;
+                }
+            }
+
+            if (feedFailed)
+            {
+                feed.LastDownloadTime = DateTime.MinValue;
+                feed.Publications = null;
+                cache.UncacheFeed(feed);
             }
             else
             {
-                // no new content so we have cached feed
-                feed.Publications = cachedFeed.Publications;
-                feed.LastDownloadTime = cachedFeed.LastDownloadTime;
-                feed.ValidTill = cachedFeed.ValidTill;
+                cache.CacheFeed(feed);
             }
-            cache.CacheFeed(feed);
         }
 
         List<Publication> ExtractPublicationsFromContent(string content)

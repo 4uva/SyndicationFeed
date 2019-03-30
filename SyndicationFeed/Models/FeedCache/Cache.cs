@@ -46,5 +46,15 @@ namespace SyndicationFeed.Models.FeedCache
                 feedsByUri[uri] = cloneFeed;
             }
         }
+
+        public void UncacheFeed(FeedWithDownloadTime feed)
+        {
+            var uri = feed.SourceAddress;
+            lock (mutex)
+            {
+                feedsByUri.Remove(uri);
+            }
+        }
+
     }
 }
