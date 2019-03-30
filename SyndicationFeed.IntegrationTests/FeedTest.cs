@@ -111,5 +111,21 @@ namespace SyndicationFeed.IntegrationTests
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
                 async () => await collection.GetFeed(nonexistingId));
         }
+
+        [Fact]
+        public async Task TestNonexistingFeedAddressBringsFeedWithFailure()
+        {
+            var feed = await collection.AddFeed(FeedType.Rss, new Uri("http://nonexisting.server.on.nonexisting.tld"));
+            Assert.NotNull(feed.LoadFailureMessage);
+            Assert.Null(feed.Publications);
+        }
+
+        [Fact]
+        public async Task TestUnparsableFeedBringsFeedWithFailure()
+        {
+            var feed = await collection.AddFeed(FeedType.Rss, new Uri("http://www.google.com"));
+            Assert.NotNull(feed.LoadFailureMessage);
+            Assert.Null(feed.Publications);
+        }
     }
 }
