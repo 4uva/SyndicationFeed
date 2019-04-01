@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SyndicationFeed.Common.Models;
+using SyndicationFeed.Models.FeedCache;
 
 namespace SyndicationFeed.Models.FeedExpansion
 {
     public class FeedExpander
     {
+        public FeedExpander(Cache cache)
+        {
+            rssExpander = new RssExpander(cache);
+            atomExpander = new AtomExpander(cache);
+        }
+
         public async Task ExpandAsync(FeedWithDownloadTime feed)
         {
             switch (feed.Type)
@@ -23,7 +30,7 @@ namespace SyndicationFeed.Models.FeedExpansion
             }
         }
 
-        RssExpander rssExpander = new RssExpander();
-        AtomExpander atomExpander = new AtomExpander();
+        RssExpander rssExpander;
+        AtomExpander atomExpander;
     }
 }

@@ -24,7 +24,7 @@ Plus will be:
 
 [x] C#/.net client SDK
 [ ] Authentication
-[ ] Persistence
+[x] Persistence
 [ ] Logging
 [x] Tests
 

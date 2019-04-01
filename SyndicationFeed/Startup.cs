@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SyndicationFeed.Models.FeedCache;
+using SyndicationFeed.Models.Storage.EF;
 
 namespace SyndicationFeed
 {
@@ -24,10 +27,13 @@ namespace SyndicationFeed
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<FeedsContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("FeedsDatabase")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddSingleton<Models.Storage.Repository>();
+            services.AddScoped<Models.Storage.Repository>();
+            services.AddSingleton<Cache>();
         }
-        
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

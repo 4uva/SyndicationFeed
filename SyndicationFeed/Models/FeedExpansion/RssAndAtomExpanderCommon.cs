@@ -15,7 +15,12 @@ namespace SyndicationFeed.Models.FeedExpansion
 
         static TimeSpan defaultExpiryTime = TimeSpan.FromHours(1);
 
-        Cache cache = new Cache();
+        Cache cache; // not created locally any more, but injected
+
+        public RssAndAtomExpanderCommon(Cache cache)
+        {
+            this.cache = cache;
+        }
 
         public async Task ExpandAsync(FeedWithDownloadTime feed)
         {

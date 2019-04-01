@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using SyndicationFeed.Common.Models;
 
 namespace SyndicationFeed.Models
 {
+    [DataContract]
     public class CollectionWithFeeds : Collection
     {
-        // using internal to prevent the field from showing up in web response
-        internal List<FeedWithDownloadTime> Feeds;
+        // not setting [DataMember] in order to avoid Feeds transfer
+        // through the API
+        public List<FeedWithDownloadTime> Feeds { get; set; }
     }
 }

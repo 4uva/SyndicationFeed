@@ -21,17 +21,17 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections
         [HttpGet]
-        public ActionResult<IEnumerable<Collection>> Get()
+        public async Task<ActionResult<IEnumerable<Collection>>> Get()
         {
-            var collections = repository.GetAllCollections();
+            var collections = await repository.GetAllCollectionsAsync();
             return Ok(collections);
         }
 
         // GET api/collections/1
         [HttpGet("{id}")]
-        public ActionResult<Collection> Get(long id)
+        public async Task<ActionResult<Collection>> Get(long id)
         {
-            var item = repository.TryFindCollection(id);
+            var item = await repository.TryFindCollectionAsync(id);
             if (item != null)
                 return item;
             else
@@ -40,17 +40,17 @@ namespace SyndicationFeed.Controllers
 
         // POST api/collections
         [HttpPost]
-        public ActionResult<Collection> Post([FromBody] string name)
+        public async Task<ActionResult<Collection>> Post([FromBody] string name)
         {
-            var newCollection = repository.AddNewCollection(name);
+            var newCollection = await repository.AddNewCollectionAsync(name);
             return CreatedAtAction(nameof(Get), new { id = newCollection.Id }, newCollection);
         }
 
         // DELETE api/collections/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            if (repository.TryRemoveCollection(id))
+            if (await repository.TryRemoveCollectionAsync(id))
                 return NoContent();
             else
                 return NotFound($"Collection id {id} doesn't exist");
@@ -58,9 +58,9 @@ namespace SyndicationFeed.Controllers
 
         // GET api/collections/ids
         [HttpGet("ids")]
-        public ActionResult<List<long>> GetIds()
+        public async Task<ActionResult<List<long>>> GetIds()
         {
-            var collections = repository.GetAllCollections();
+            var collections = await repository.GetAllCollectionsAsync();
             var ids = collections.Select(coll => coll.Id).ToList();
             return Ok(ids);
         }

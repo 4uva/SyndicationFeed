@@ -80,9 +80,9 @@ namespace SyndicationFeed.Controllers
 
         // DELETE api/collections/1/feeds/1
         [HttpDelete("{id}")]
-        public IActionResult Delete(long collid, long id)
+        public async Task<IActionResult> Delete(long collid, long id)
         {
-            if (repository.TryRemoveFeed(collid, id))
+            if (await repository.TryRemoveFeedAsync(collid, id))
                 return NoContent();
             else
                 return NotFound($"Collection id {collid} or feed id {id} doesn't exist");

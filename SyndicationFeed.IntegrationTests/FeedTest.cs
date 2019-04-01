@@ -13,12 +13,13 @@ namespace SyndicationFeed.IntegrationTests
     // https://fullstackmark.com/post/20/painless-integration-testing-with-aspnet-core-web-api
     // and
     // https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-2.2
-    public class FeedTest : IClassFixture<WebApplicationFactory<Startup>>, IAsyncLifetime
+    public class FeedTest
+        : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
     {
         SyndicationFeedRoot root;
         SdkCollection collection;
 
-        public FeedTest(WebApplicationFactory<Startup> factory)
+        public FeedTest(CustomWebApplicationFactory<Startup> factory)
         {
             var client = factory.CreateClient();
             root = new SyndicationFeedRoot(client);

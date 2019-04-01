@@ -2,50 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SyndicationFeed.Common.Models;
+using SyndicationFeed.Models.FeedCache;
 using SyndicationFeed.Models.FeedExpansion;
+using SyndicationFeed.Models.Storage.EF;
 
 namespace SyndicationFeed.Models.Storage
 {
     public class Repository
     {
-        List<CollectionWithFeeds> collections = new List<CollectionWithFeeds>();
-        long maxId = 0; 
-
-        FeedExpander feedExpander = new FeedExpander();
-
-        public IEnumerable<Collection> GetAllCollections() => collections;
-
-        CollectionWithFeeds TryFindCollectionInternal(long id)
+        public Repository(FeedsContext context, Cache cache)
         {
-            return collections.SingleOrDefault(i => i.Id == id);
+            this.context = context;
+            feedExpander = new FeedExpander(cache);
         }
 
-        public Collection TryFindCollection(long id) =>
-            TryFindCollectionInternal(id);
+        FeedExpander feedExpander;
+        FeedsContext context;
 
-        public Collection AddNewCollection(string name)
+        public async Task<IEnumerable<Collection>> GetAllCollectionsAsync() =>
+            await context.Collections.Include(c => c.Feeds).ToListAsync();
+
+        // https://stackoverflow.com/a/40360633/10243782
+        // cannot use FindAsync
+        async Task<CollectionWithFeeds> TryFindCollectionInternalAsync(long id) =>
+            await context.Collections.Include(c => c.Feeds)
+                                     .FirstOrDefaultAsync(c => c.Id == id);
+
+        public async Task<Collection> TryFindCollectionAsync(long id) =>
+            await TryFindCollectionInternalAsync(id);
+
+        public async Task<Collection> AddNewCollectionAsync(string name)
         {
             var coll = new CollectionWithFeeds()
             {
-                Id = maxId,
                 Name = name,
                 Feeds = new List<FeedWithDownloadTime>()
             };
-            collections.Add(coll);
-            maxId++;
+            await context.AddAsync(coll);
+            await context.SaveChangesAsync();
             return coll;
         }
 
-        public bool TryRemoveCollection(long id)
+        public async Task<bool> TryRemoveCollectionAsync(long id)
         {
-            var coll = TryFindCollectionInternal(id);
-            return collections.Remove(coll); // true if found, false if not
+            var coll = await TryFindCollectionInternalAsync(id);
+            if (coll == null)
+                return false; // was not there
+            context.Collections.Remove(coll);
+            await context.SaveChangesAsync();
+            return true; // true if found, false if not
         }
 
         public async Task<IEnumerable<Feed>> TryFindFeedsAsync(long collid)
         {
-            var coll = TryFindCollectionInternal(collid);
+            var coll = await TryFindCollectionInternalAsync(collid);
             if (coll != null)
             {
                 var feeds = coll.Feeds;
@@ -63,7 +75,7 @@ namespace SyndicationFeed.Models.Storage
 
         public async Task<Feed> TryFindFeedAsync(long collid, long id)
         {
-            var coll = TryFindCollectionInternal(collid);
+            var coll = await TryFindCollectionInternalAsync(collid);
             if (coll != null)
             {
                 var feed = coll.Feeds.SingleOrDefault(f => f.Id == id);
@@ -79,15 +91,11 @@ namespace SyndicationFeed.Models.Storage
 
         public async Task<Feed> AddNewFeedAsync(long collid, FeedType type, Uri uri)
         {
-            var coll = TryFindCollectionInternal(collid); 
+            var coll = await TryFindCollectionInternalAsync(collid); 
             if (coll == null)
                 return null;
-            var id = 0L; // long
-            if (coll.Feeds.Count > 0)
-                id = coll.Feeds.Max(feed => feed.Id) + 1; 
             var newFeed = new FeedWithDownloadTime()
             {
-                Id = id,
                 Type = type,
                 SourceAddress = uri,
                 Publications = new List<Publication>(),
@@ -97,17 +105,21 @@ namespace SyndicationFeed.Models.Storage
             };
             await feedExpander.ExpandAsync(newFeed);
             coll.Feeds.Add(newFeed);
+            await context.SaveChangesAsync();
             return newFeed;
         }
 
-        public bool TryRemoveFeed(long collid, long id)
+        public async Task<bool> TryRemoveFeedAsync(long collid, long id)
         {
-            var coll = TryFindCollectionInternal(collid);
+            var coll = await TryFindCollectionInternalAsync(collid);
             if (coll == null)
                 return false;
 
             var feed = coll.Feeds.SingleOrDefault(f => f.Id == id);
-            return coll.Feeds.Remove(feed); // true if found, false if not
+            var result = coll.Feeds.Remove(feed);
+            if (result) // found
+                await context.SaveChangesAsync();
+            return result; // true if found, false if not
         }
     }
 }
