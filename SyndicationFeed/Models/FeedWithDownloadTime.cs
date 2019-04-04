@@ -7,6 +7,20 @@ using SyndicationFeed.Common.Models;
 
 namespace SyndicationFeed.Models
 {
+
+    /*
+     *   Property          Sent over Web API   Stored in DB
+     *  ---------------------------------------------------
+     *         Id                  +                 + (PK)
+     *        Type                 +                 +
+     *    SourceAddress            +                 -
+     *    Publications             +                 -
+     *  LoadFailureMessage         +                 -
+     *   LastDownloadTime          -                 -
+     *      ValidTill              -                 -
+     *  SourceAddressString        -                 +
+     */
+
     [DataContract]
     public class FeedWithDownloadTime : Feed
     {

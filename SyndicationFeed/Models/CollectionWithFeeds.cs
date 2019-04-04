@@ -7,6 +7,14 @@ using SyndicationFeed.Common.Models;
 
 namespace SyndicationFeed.Models
 {
+    /*
+     *   Property    Sent over Web API   Stored in DB
+     *  ------------------------------------------------
+     *     Id               +                  + (PK)
+     *    Name              +                  +
+     *    Feeds             -                 nav
+     */
+
     [DataContract]
     public class CollectionWithFeeds : Collection
     {

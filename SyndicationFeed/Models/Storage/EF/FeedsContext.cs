@@ -24,6 +24,8 @@ namespace SyndicationFeed.Models.Storage.EF
                 .Ignore(feed => feed.Publications)
                 .Ignore(feed => feed.LoadFailureMessage)
                 .Ignore(feed => feed.SourceAddress)
+                .Ignore(feed => feed.LastDownloadTime)
+                .Ignore(feed => feed.ValidTill)
                 .Property(feed => feed.SourceAddressString);
         }
 
