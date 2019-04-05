@@ -27,6 +27,11 @@ namespace SyndicationFeed.Models.Storage.EF
                 .Ignore(feed => feed.LastDownloadTime)
                 .Ignore(feed => feed.ValidTill)
                 .Property(feed => feed.SourceAddressString);
+
+            modelBuilder.Entity<CollectionWithFeeds>()
+                .HasMany(b => b.Feeds)
+                .WithOne()
+                .IsRequired();
         }
 
         public DbSet<CollectionWithFeeds> Collections { get; set; }
