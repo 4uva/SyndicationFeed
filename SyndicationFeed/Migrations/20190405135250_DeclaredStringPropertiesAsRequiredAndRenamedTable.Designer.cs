@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SyndicationFeed.Models.Storage.EF;
 
 namespace SyndicationFeed.Server.Migrations
 {
     [DbContext(typeof(FeedsContext))]
-    partial class FeedsContextModelSnapshot : ModelSnapshot
+    [Migration("20190405135250_DeclaredStringPropertiesAsRequiredAndRenamedTable")]
+    partial class DeclaredStringPropertiesAsRequiredAndRenamedTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
