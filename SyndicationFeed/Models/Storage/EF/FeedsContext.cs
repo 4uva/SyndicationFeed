@@ -21,17 +21,21 @@ namespace SyndicationFeed.Models.Storage.EF
             // we are using fluent api in order to avoid polluting
             // common classes with EF-specific attributes
             modelBuilder.Entity<FeedWithDownloadTime>()
+                .ToTable("Feeds")
                 .Ignore(feed => feed.Publications)
                 .Ignore(feed => feed.LoadFailureMessage)
                 .Ignore(feed => feed.SourceAddress)
                 .Ignore(feed => feed.LastDownloadTime)
                 .Ignore(feed => feed.ValidTill)
-                .Property(feed => feed.SourceAddressString);
+                .Property(feed => feed.SourceAddressString).IsRequired();
 
             modelBuilder.Entity<CollectionWithFeeds>()
-                .HasMany(b => b.Feeds)
+                .HasMany(coll => coll.Feeds)
                 .WithOne()
                 .IsRequired();
+
+            modelBuilder.Entity<CollectionWithFeeds>()
+                .Property(coll => coll.Name).IsRequired();
         }
 
         public DbSet<CollectionWithFeeds> Collections { get; set; }
