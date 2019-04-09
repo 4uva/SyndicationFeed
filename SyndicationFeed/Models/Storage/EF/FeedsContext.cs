@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SyndicationFeed.Common.Models;
 
 namespace SyndicationFeed.Models.Storage.EF
 {
-    public class FeedsContext : DbContext
+    public class FeedsContext : IdentityDbContext
     {
         public FeedsContext(DbContextOptions<FeedsContext> options)
             : base(options)
@@ -16,6 +17,8 @@ namespace SyndicationFeed.Models.Storage.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // do not store publications and failure message in the DB,
             // only in cache
             // we are using fluent api in order to avoid polluting
