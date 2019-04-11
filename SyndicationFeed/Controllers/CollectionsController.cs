@@ -7,11 +7,13 @@ using SyndicationFeed.Common.Models;
 using SyndicationFeed.Models.Storage;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SyndicationFeed.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CollectionsController : ControllerBase
     {
         public CollectionsController(Repository repository)
