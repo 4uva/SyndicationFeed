@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,11 +41,34 @@ namespace SyndicationFeed.Server.Controllers
             }
             else
             {
-                //return StatusCode(StatusCodes.Status201Created); // TODO redirect?
-                return CreatedAtAction(
-                    nameof(Login),
-                    new { info = new LoginInfo() { UserName = info.UserName, Password = info.Password } },
-                    null); // is null ok here?
+                return StatusCode(StatusCodes.Status201Created); // TODO redirect?
+            }
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> Unregister()
+        {
+            // userManager.GetUserAsync(User) doesn't work:
+            // https://stackoverflow.com/q/51119926/10243782
+            var userName = User.Identity.Name;
+            var user = await userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                // deleted elsewhere in the meanwhile?
+                // is here a way to distinguish?
+                return NoContent();
+            }
+
+            var deleteResult = await userManager.DeleteAsync(user);
+            if (!deleteResult.Succeeded)
+            {
+                var descriptions = deleteResult.Errors.Select(error => error.Description).ToList();
+                return BadRequest(descriptions);
+            }
+            else
+            {
+                return NoContent();
             }
         }
 
