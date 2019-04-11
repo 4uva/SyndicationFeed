@@ -23,7 +23,7 @@ Necessary functions:
 Plus will be:
 
 [x] C#/.net client SDK
-[ ] Authentication
+[x] Authentication
 [x] Persistence
 [ ] Logging
 [x] Tests
