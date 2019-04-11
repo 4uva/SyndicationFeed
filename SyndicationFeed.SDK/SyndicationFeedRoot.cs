@@ -10,14 +10,9 @@ namespace SyndicationFeed.SDK
     {
         readonly RestHelper helper;
 
-        public SyndicationFeedRoot(Uri uri, int port)
+        internal SyndicationFeedRoot(RestHelper helper)
         {
-            helper = new RestHelper(uri, port);
-        }
-
-        public SyndicationFeedRoot(HttpClient client)
-        {
-            helper = new RestHelper(client);
+            this.helper = helper;
         }
 
         public async Task<List<SdkCollection>> GetAllCollections()

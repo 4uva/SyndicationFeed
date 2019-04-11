@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
+using SyndicationFeed.Common.Models;
 using SyndicationFeed.SDK;
 using Xunit;
 
@@ -13,14 +14,30 @@ namespace SyndicationFeed.IntegrationTests
     // and
     // https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-2.2
     public class CollectionTest
-        : IClassFixture<CustomWebApplicationFactory<Startup>>
+        : IClassFixture<CustomWebApplicationFactory<Startup>>,  IAsyncLifetime
     {
+        const string userName = "testcollections";
+        const string password = "test";
+
+        UserManagement mgmt;
         SyndicationFeedRoot root;
 
         public CollectionTest(CustomWebApplicationFactory<Startup> factory)
         {
             var client = factory.CreateClient();
-            root = new SyndicationFeedRoot(client);
+            mgmt = new UserManagement(client);
+        }
+
+        public async Task InitializeAsync()
+        {
+            await mgmt.Register(
+                new RegisterInfo() { UserName = userName, Password = password });
+            root = mgmt.Login(userName, password);
+        }
+
+        public async Task DisposeAsync()
+        {
+            await mgmt.Unregister();
         }
 
         [Fact]

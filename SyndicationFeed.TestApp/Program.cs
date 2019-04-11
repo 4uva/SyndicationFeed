@@ -13,7 +13,18 @@ namespace SyndicationFeed.TestApp
         {
             var uri = new Uri("https://localhost");
             var port = 44301;
-            var root = new SyndicationFeedRoot(uri, port);
+            const string userName = "testfeeds";
+            const string password = "test";
+            var mgmt = new UserManagement(uri, port);
+
+            bool needRegistration = true;
+            if (needRegistration)
+            {
+                await mgmt.Register(
+                    new RegisterInfo() { UserName = userName, Password = password });
+            }
+
+            var root = mgmt.Login(userName, password);
 
             Console.WriteLine("Adding a sample collection");
             var coll = await root.AddCollection("Sample");
@@ -45,6 +56,12 @@ namespace SyndicationFeed.TestApp
 
             Console.WriteLine("Removing feed 1");
             await coll.DeleteFeed(feeds[0].Id);
+
+            if (needRegistration)
+            {
+                // if there was registration, unregister it back
+                await mgmt.Unregister();
+            }
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey(false);

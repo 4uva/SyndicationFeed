@@ -16,23 +16,31 @@ namespace SyndicationFeed.IntegrationTests
     public class FeedTest
         : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
     {
+        const string userName = "testfeeds";
+        const string password = "test";
+
+        UserManagement mgmt;
         SyndicationFeedRoot root;
         SdkCollection collection;
 
         public FeedTest(CustomWebApplicationFactory<Startup> factory)
         {
             var client = factory.CreateClient();
-            root = new SyndicationFeedRoot(client);
+            mgmt = new UserManagement(client);
         }
 
         public async Task InitializeAsync()
         {
+            await mgmt.Register(
+                new RegisterInfo() { UserName = userName, Password = password });
+            root = mgmt.Login(userName, password);
             collection = await root.AddCollection("Test collection");
         }
 
         public async Task DisposeAsync()
         {
             await root.DeleteCollection(collection.Id);
+            await mgmt.Unregister();
         }
 
         static bool PublicationsEqual(Publication p1, Publication p2)
