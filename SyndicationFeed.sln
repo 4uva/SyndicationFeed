@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyndicationFeed.SDK", "Synd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyndicationFeed.TestApp", "SyndicationFeed.TestApp\SyndicationFeed.TestApp.csproj", "{38FC1A1A-19B9-435D-A03E-49196C5C32F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyndicationFeed.IntegrationTests", "SyndicationFeed.IntegrationTests\SyndicationFeed.IntegrationTests.csproj", "{53C8AA40-20E2-470B-97C8-107836EEC4B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyndicationFeed.IntegrationTests", "SyndicationFeed.IntegrationTests\SyndicationFeed.IntegrationTests.csproj", "{53C8AA40-20E2-470B-97C8-107836EEC4B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
