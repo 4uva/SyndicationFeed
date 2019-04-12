@@ -25,7 +25,7 @@ namespace SyndicationFeed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Collection>>> Get()
         {
-            var collections = await repository.GetAllCollectionsAsync();
+            var collections = await repository.GetCollectionsAsync();
             return Ok(collections);
         }
 
@@ -62,7 +62,7 @@ namespace SyndicationFeed.Controllers
         [HttpGet("ids")]
         public async Task<ActionResult<List<long>>> GetIds()
         {
-            var collections = await repository.GetAllCollectionsAsync();
+            var collections = await repository.GetCollectionsAsync();
             var ids = collections.Select(coll => coll.Id).ToList();
             return Ok(ids);
         }

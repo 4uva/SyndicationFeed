@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SyndicationFeed.Models;
 using SyndicationFeed.Models.FeedCache;
+using SyndicationFeed.Models.Storage;
 using SyndicationFeed.Models.Storage.EF;
 
 namespace SyndicationFeed
@@ -36,7 +37,9 @@ namespace SyndicationFeed
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddScoped<Models.Storage.Repository>();
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<Repository>();
             services.AddSingleton<Cache>();
 
             var secret = "This is a secret used for key generation"; // temporary hardcoded
@@ -50,6 +53,7 @@ namespace SyndicationFeed
 
             services.Configure<IdentityOptions>(options =>
             {
+                options.User.AllowedUserNameCharacters = string.Empty;
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;

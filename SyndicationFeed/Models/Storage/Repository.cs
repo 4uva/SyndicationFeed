@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SyndicationFeed.Common.Models;
 using SyndicationFeed.Models.FeedCache;
@@ -12,33 +15,67 @@ namespace SyndicationFeed.Models.Storage
 {
     public class Repository
     {
-        public Repository(FeedsContext context, Cache cache)
+        public Repository(
+            FeedsContext context,
+            Cache cache,
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<IdentityUser> userManager)
         {
             this.context = context;
             feedExpander = new FeedExpander(cache);
+            userName = httpContextAccessor.HttpContext?.User.Identity.Name;
+            this.userManager = userManager;
         }
 
         FeedExpander feedExpander;
         FeedsContext context;
+        string userName;
+        UserManager<IdentityUser> userManager;
+        IdentityUser user;
 
-        public async Task<IEnumerable<Collection>> GetAllCollectionsAsync() =>
-            await context.Collections.Include(c => c.Feeds).ToListAsync();
+        async Task<IdentityUser> GetUserAsync()
+        {
+            // userManager.GetUserAsync(User) doesn't work:
+            // https://stackoverflow.com/q/51119926/10243782
+            if (user == null)
+                user = await userManager.FindByNameAsync(userName);
+            return user;
+        }
+
+        async Task<IQueryable<CollectionWithFeeds>> GetUserCollectionsAsync()
+        {
+            if (user == null)
+                user = await GetUserAsync();
+            return context.Collections
+                          .Where(coll => coll.User == user)
+                          .Include(c => c.Feeds);
+        }
+
+        public async Task<IEnumerable<Collection>> GetCollectionsAsync()
+        {
+            var collections = await GetUserCollectionsAsync();
+            return await collections.ToListAsync();
+        }
 
         // https://stackoverflow.com/a/40360633/10243782
         // cannot use FindAsync
-        async Task<CollectionWithFeeds> TryFindCollectionInternalAsync(long id) =>
-            await context.Collections.Include(c => c.Feeds)
-                                     .FirstOrDefaultAsync(c => c.Id == id);
+        async Task<CollectionWithFeeds> TryFindCollectionInternalAsync(long id)
+        {
+            var collections = await GetUserCollectionsAsync();
+            return await collections.FirstOrDefaultAsync(c => c.Id == id);
+        }
 
         public async Task<Collection> TryFindCollectionAsync(long id) =>
             await TryFindCollectionInternalAsync(id);
 
         public async Task<Collection> AddNewCollectionAsync(string name)
         {
+            var user = await GetUserAsync();
             var coll = new CollectionWithFeeds()
             {
                 Name = name,
-                Feeds = new List<FeedWithDownloadTime>()
+                Feeds = new List<FeedWithDownloadTime>(),
+                User = user
             };
             await context.AddAsync(coll);
             await context.SaveChangesAsync();
