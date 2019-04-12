@@ -45,12 +45,14 @@ namespace SyndicationFeed.SDK
 
         public void SetupAuthorization<T>(string webApiAddress, T loginInfo)
         {
+            client.DefaultRequestHeaders.Authorization = null;
             performAuthentication =
                 () => Authenticate(webApiAddress, loginInfo);
         }
 
         public void DropAuthorization()
         {
+            client.DefaultRequestHeaders.Authorization = null;
             performAuthentication = null;
         }
 
