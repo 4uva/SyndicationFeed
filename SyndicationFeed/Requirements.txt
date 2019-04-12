@@ -25,7 +25,7 @@ Plus will be:
 [x] C#/.net client SDK
 [x] Authentication
 [x] Persistence
-[ ] Logging
+[x] Logging
 [x] Tests
 
 Projects will be tested on latest Visual Studio 2017 Community/Pro with Core and Web tools installed.
