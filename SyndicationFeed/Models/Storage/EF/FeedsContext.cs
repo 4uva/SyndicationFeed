@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SyndicationFeed.Common.Models;
@@ -38,9 +39,15 @@ namespace SyndicationFeed.Models.Storage.EF
                 .IsRequired();
 
             modelBuilder.Entity<CollectionWithFeeds>()
-                .Property(coll => coll.Name).IsRequired();
-        }
+                .Property(coll => coll.Name)
+                .IsRequired();
 
+            modelBuilder.Entity<CollectionWithFeeds>()
+                .HasOne(coll => coll.User)
+                .WithMany()
+                .IsRequired();
+        }
+        
         public DbSet<CollectionWithFeeds> Collections { get; set; }
     }
 }
