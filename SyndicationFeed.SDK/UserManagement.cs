@@ -34,8 +34,15 @@ namespace SyndicationFeed.SDK
 
         public async Task Register(RegisterInfo info)
         {
-            await helper.PostNoRedirectAsync(
-                "auth/register", info, useAuth: false);
+            try
+            {
+                await helper.PostNoRedirectAsync(
+                    "auth/register", info, useAuth: false);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException("Registration failed", ex);
+            }
         }
 
         public async Task Unregister()
