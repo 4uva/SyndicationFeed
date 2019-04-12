@@ -13,15 +13,12 @@ using Microsoft.IdentityModel.Tokens;
 using SyndicationFeed.Common.Models;
 using SyndicationFeed.Models;
 
-namespace SyndicationFeed.Server.Controllers
+namespace SyndicationFeed.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        readonly UserManager<IdentityUser> userManager;
-        readonly ITokenService tokenService;
-
         public AuthController(UserManager<IdentityUser> userManager, ITokenService tokenService)
         {
             this.userManager = userManager;
@@ -49,10 +46,7 @@ namespace SyndicationFeed.Server.Controllers
         [Authorize]
         public async Task<IActionResult> Unregister()
         {
-            // userManager.GetUserAsync(User) doesn't work:
-            // https://stackoverflow.com/q/51119926/10243782
-            var userName = User.Identity.Name;
-            var user = await userManager.FindByNameAsync(userName);
+            var user = await UserHelper.GetUserAsync(User, userManager);
             if (user == null)
             {
                 // deleted elsewhere in the meanwhile?
@@ -87,5 +81,8 @@ namespace SyndicationFeed.Server.Controllers
 
             return Ok(token);
         }
+
+        readonly UserManager<IdentityUser> userManager;
+        readonly ITokenService tokenService;
     }
 }
