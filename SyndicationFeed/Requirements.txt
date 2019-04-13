@@ -27,5 +27,6 @@ Plus will be:
 [x] Persistence
 [x] Logging
 [x] Tests
+[ ] Desktop client
 
 Projects will be tested on latest Visual Studio 2017 Community/Pro with Core and Web tools installed.
