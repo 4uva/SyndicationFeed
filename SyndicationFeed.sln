@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyndicationFeed.TestApp", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyndicationFeed.IntegrationTests", "SyndicationFeed.IntegrationTests\SyndicationFeed.IntegrationTests.csproj", "{53C8AA40-20E2-470B-97C8-107836EEC4B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyndicationFeed.Client", "SyndicationFeed.Client\SyndicationFeed.Client.csproj", "{96956542-095E-41FB-B5A3-5DB91FDE1A63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{53C8AA40-20E2-470B-97C8-107836EEC4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53C8AA40-20E2-470B-97C8-107836EEC4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53C8AA40-20E2-470B-97C8-107836EEC4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96956542-095E-41FB-B5A3-5DB91FDE1A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96956542-095E-41FB-B5A3-5DB91FDE1A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96956542-095E-41FB-B5A3-5DB91FDE1A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96956542-095E-41FB-B5A3-5DB91FDE1A63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
