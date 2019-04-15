@@ -7,6 +7,7 @@ using SyndicationFeed.Common.Models;
 
 namespace SyndicationFeed.SDK
 {
+    // TODO: implement IDisposable
     public class UserManagement
     {
         readonly RestHelper helper;
@@ -30,6 +31,11 @@ namespace SyndicationFeed.SDK
             };
             helper.SetupAuthorization("auth/login", loginInfo);
             return new SyndicationFeedRoot(helper);
+        }
+
+        public void Logout()
+        {
+            helper.DropAuthorization();
         }
 
         public async Task Register(RegisterInfo info)
