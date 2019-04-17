@@ -56,12 +56,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\AddCollectionControl.xaml.cs">
+      <DependentUpon>AddCollectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LeftColumnContent.xaml.cs">
+      <DependentUpon>LeftColumnContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NullToVisibilityConverter.cs" />
     <Compile Include="View\UserManagementWindow.xaml.cs">
       <DependentUpon>UserManagementWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VM\AddCollectionVM.cs" />
+    <Compile Include="VM\CollectionVM.cs" />
+    <Compile Include="VM\MainVM.cs" />
     <Compile Include="VM\SimpleCommand.cs" />
     <Compile Include="VM\UserVM.cs" />
     <Compile Include="VM\VM.cs" />
+    <Page Include="View\AddCollectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LeftColumnContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

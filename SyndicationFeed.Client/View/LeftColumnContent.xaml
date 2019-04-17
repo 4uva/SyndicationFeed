@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="SyndicationFeed.Client.View.LeftColumnContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyndicationFeed.Client.VM"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SyndicationFeed.Client.View"
+             d:DataContext="{d:DesignInstance Type=vm:MainVM, IsDesignTimeCreatable=False}"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="200">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- user -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Text="User: "/>
+            <TextBlock Text="{Binding User.UserName}"/>
+        </StackPanel>
+
+        <!-- collections -->
+        <Grid Grid.Row="1"
+              Visibility="{Binding User.IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- collections header -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Text="Collections ("/>
+                <TextBlock Text="{Binding CollectionCount}"/>
+                <TextBlock Text=")"/>
+            </StackPanel>
+
+            <!-- collection items -->
+            <ListView ItemsSource="{Binding Collections}" Grid.Row="1" DisplayMemberPath="Name"/>
+
+            <!-- collection operations -->
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <Button Command="{Binding AddCollectionCommand}">Add new collection</Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
