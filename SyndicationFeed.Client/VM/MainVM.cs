@@ -15,6 +15,7 @@ namespace SyndicationFeed.Client.VM
             User = user ?? throw new ArgumentNullException(nameof(user));
             user.PropertyChanged += OnUserPropertyChanged;
             AddCollectionCommand = new SimpleCommand(OnAddCollection);
+            RemoveCurrentCollectionCommand = new SimpleCommand(OnRemoveCurrentCollection) { AllowExecute = false };
         }
 
         async void OnUserPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -26,6 +27,8 @@ namespace SyndicationFeed.Client.VM
                 AddCollectionCommand.AllowExecute = isAuthenticated;
                 if (isAuthenticated)
                     await TryShowCollections();
+                else
+                    HideCollections();
             }
         }
 
@@ -53,14 +56,22 @@ namespace SyndicationFeed.Client.VM
                 throw new InvalidOperationException("Must be authenticated to access the collections");
 
             Collections = null;
+            CurrentCollection = null;
             var root = User.GetFeedRoot();
             var modelCollections = await root.GetAllCollections();
             Collections = modelCollections.Select(coll => new CollectionVM(coll)).ToList();
         }
 
+        void HideCollections()
+        {
+            CurrentCollection = null;
+            Collections = null;
+        }
+
         public UserVM User { get; }
 
         public SimpleCommand AddCollectionCommand { get; }
+        public SimpleCommand RemoveCurrentCollectionCommand { get; }
 
         string status;
         public string Status
@@ -87,6 +98,17 @@ namespace SyndicationFeed.Client.VM
             private set => Set(ref collectionCount, value);
         }
 
+        CollectionVM currentCollection;
+        public CollectionVM CurrentCollection
+        {
+            get => currentCollection;
+            set
+            {
+                if (Set(ref currentCollection, value))
+                    RemoveCurrentCollectionCommand.AllowExecute = (value != null);
+            }
+        }
+
         AddCollectionVM addCollection;
         public AddCollectionVM AddCollection
         {
@@ -104,13 +126,37 @@ namespace SyndicationFeed.Client.VM
                 AddCollectionCommand.AllowExecute = false;
                 var root = User.GetFeedRoot();
                 AddCollection = new AddCollectionVM(root);
-                await AddCollection.Execution;
-                await TryShowCollections();
+                long? id = await AddCollection.Execution;
+                if (id != null)
+                {
+                    await TryShowCollections();
+                    if (Collections != null)
+                        CurrentCollection = Collections.FirstOrDefault(coll => coll.Id == id);
+                }
             }
             finally
             {
                 AddCollection = null;
                 AddCollectionCommand.AllowExecute = User.IsAuthenticated;
+            }
+        }
+
+        async void OnRemoveCurrentCollection()
+        {
+            if (!User.IsAuthenticated || CurrentCollection == null)
+                return;
+
+            try
+            {
+                RemoveCurrentCollectionCommand.AllowExecute = false;
+                var root = User.GetFeedRoot();
+                await CurrentCollection.RemoveItself(root);
+                CurrentCollection = null;
+                await TryShowCollections();
+            }
+            finally
+            {
+                RemoveCurrentCollectionCommand.AllowExecute = (CurrentCollection != null);
             }
         }
     }

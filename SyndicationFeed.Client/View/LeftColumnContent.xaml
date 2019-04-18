@@ -4,12 +4,12 @@
              xmlns:vm="clr-namespace:SyndicationFeed.Client.VM"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SyndicationFeed.Client.View"
+             xmlns:view="clr-namespace:SyndicationFeed.Client.View"
              d:DataContext="{d:DesignInstance Type=vm:MainVM, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="200">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <view:ExtendedBooleanToVisibilityConverter x:Key="ExtendedBooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,15 +17,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- user -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBlock Text="User: "/>
-            <TextBlock Text="{Binding User.UserName}"/>
-        </StackPanel>
-
         <!-- collections -->
         <Grid Grid.Row="1"
-              Visibility="{Binding User.IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}">
+              Visibility="{Binding User.IsAuthenticated, Converter={StaticResource ExtendedBooleanToVisibilityConverter}}">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -41,12 +35,22 @@
             </StackPanel>
 
             <!-- collection items -->
-            <ListView ItemsSource="{Binding Collections}" Grid.Row="1" DisplayMemberPath="Name"/>
+            <ListView ItemsSource="{Binding Collections}" Grid.Row="1" DisplayMemberPath="Name"
+                      SelectedItem="{Binding CurrentCollection}" SelectionMode="Single"/>
 
             <!-- collection operations -->
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <Button Command="{Binding AddCollectionCommand}">Add new collection</Button>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="10">
+                <Button Command="{Binding AddCollectionCommand}" MinWidth="50" Margin="0,0,10,0">New</Button>
+                <Button Command="{Binding RemoveCurrentCollectionCommand}" MinWidth="50">Delete</Button>
             </StackPanel>
+        </Grid>
+        
+        <!-- fallback view -->
+        <Grid Grid.Row="1"
+              Visibility="{Binding User.IsAuthenticated,
+                                   Converter={StaticResource ExtendedBooleanToVisibilityConverter},
+                                   ConverterParameter=invert}">
+            <TextBlock>User not logged in</TextBlock>
         </Grid>
     </Grid>
 </UserControl>

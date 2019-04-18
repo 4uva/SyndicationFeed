@@ -14,7 +14,11 @@
     
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="User"/>
+            <MenuItem Header="User">
+                <MenuItem Header="Login/Register..." Click="ShowAuthWindow"/>
+                <MenuItem Header="Logout" Command="{Binding User.LogoutCommand}"/>
+                <MenuItem Header="Unregister" Command="{Binding User.UnregisterCommand}"/>
+            </MenuItem>
         </Menu>
         
         <!-- page content -->
@@ -31,6 +35,10 @@
             <Grid Grid.Column="1">
                 <view:AddCollectionControl DataContext="{Binding AddCollection}"
                                            Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"/>
+                <Grid Visibility="{Binding AddCollection, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=invert}">
+                    <view:CollectionViewControl DataContext="{Binding CurrentCollection}"
+                                               Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"/>
+                </Grid>
             </Grid>
         </Grid>
     </DockPanel>

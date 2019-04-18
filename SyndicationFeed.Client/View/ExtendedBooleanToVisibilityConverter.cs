@@ -9,12 +9,14 @@ using System.Windows.Data;
 
 namespace SyndicationFeed.Client.View
 {
-    class NullToVisibilityConverter : IValueConverter
+    class ExtendedBooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool invert = parameter != null;
-            bool isVisible = value != null;
+            bool isVisible = false;
+            if (value is bool b)
+                isVisible = b;
             if (invert)
                 isVisible = !isVisible;
             return isVisible ? Visibility.Visible : Visibility.Collapsed;

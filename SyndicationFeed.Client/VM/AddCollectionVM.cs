@@ -19,9 +19,9 @@ namespace SyndicationFeed.Client.VM
 
         readonly SyndicationFeedRoot root;
 
-        TaskCompletionSource<bool> executionLifetime = new TaskCompletionSource<bool>();
+        TaskCompletionSource<long?> executionLifetime = new TaskCompletionSource<long?>();
 
-        public Task<bool> Execution { get; }
+        public Task<long?> Execution { get; }
 
         string name;
         public string Name
@@ -51,9 +51,9 @@ namespace SyndicationFeed.Client.VM
 
             try
             {
-                await root.AddCollection(Name);
+                var sdkCollection = await root.AddCollection(Name);
                 // finish execution
-                executionLifetime.SetResult(true);
+                executionLifetime.SetResult(sdkCollection.Id);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace SyndicationFeed.Client.VM
 
         void OnClose()
         {
-            executionLifetime.SetResult(false);
+            executionLifetime.SetResult(null);
         }
     }
 }

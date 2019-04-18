@@ -15,17 +15,14 @@ using System.Windows.Shapes;
 
 namespace SyndicationFeed.Client.View
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for CollectionViewControl.xaml
+    /// </summary>
+    public partial class CollectionViewControl : UserControl
     {
-        public MainWindow()
+        public CollectionViewControl()
         {
             InitializeComponent();
-        }
-
-        void ShowAuthWindow(object sender, RoutedEventArgs e)
-        {
-            var app = (App)Application.Current;
-            app.ShowAuthenticationDialog();
         }
     }
 }

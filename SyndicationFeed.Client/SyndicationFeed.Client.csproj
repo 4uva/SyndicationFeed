@@ -59,6 +59,10 @@
     <Compile Include="View\AddCollectionControl.xaml.cs">
       <DependentUpon>AddCollectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\CollectionViewControl.xaml.cs">
+      <DependentUpon>CollectionViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ExtendedBooleanToVisibilityConverter.cs" />
     <Compile Include="View\LeftColumnContent.xaml.cs">
       <DependentUpon>LeftColumnContent.xaml</DependentUpon>
     </Compile>
@@ -68,11 +72,16 @@
     </Compile>
     <Compile Include="VM\AddCollectionVM.cs" />
     <Compile Include="VM\CollectionVM.cs" />
+    <Compile Include="VM\FeedVM.cs" />
     <Compile Include="VM\MainVM.cs" />
     <Compile Include="VM\SimpleCommand.cs" />
     <Compile Include="VM\UserVM.cs" />
     <Compile Include="VM\VM.cs" />
     <Page Include="View\AddCollectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CollectionViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -121,7 +130,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SyndicationFeed.Common\SyndicationFeed.Common.csproj">
