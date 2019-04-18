@@ -42,7 +42,7 @@ namespace SyndicationFeed
             services.AddScoped<Repository>();
             services.AddSingleton<Cache>();
 
-            var secret = "This is a secret used for key generation"; // temporary hardcoded
+            var secret = "This is a secret used for key generation"; // TODO: temporary hardcoded
             var key = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(secret));
 
             services.AddSingleton<ITokenService>(new TokenService(key));

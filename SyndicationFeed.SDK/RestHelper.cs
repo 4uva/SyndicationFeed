@@ -75,14 +75,14 @@ namespace SyndicationFeed.SDK
         async Task<HttpResponseMessage> WithAuth(
             Func<Task<HttpResponseMessage>> process, bool useAuth)
         {
-            HttpResponseMessage response = await process();
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && useAuth)
+            HttpResponseMessage response = await process(); // normal request
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && useAuth) // not autorized?
             {
                 if (performAuthentication == null)
                     throw new InvalidOperationException("No authorization is set up");
                 // perform authorization and repeat
                 await performAuthentication();
-                response = await process();
+                response = await process(); // repeated request
             }
             return response;
         }
