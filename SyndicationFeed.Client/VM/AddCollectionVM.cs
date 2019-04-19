@@ -7,21 +7,14 @@ using SyndicationFeed.SDK;
 
 namespace SyndicationFeed.Client.VM
 {
-    class AddCollectionVM : VM
+    class AddCollectionVM : AddCommonVM
     {
         public AddCollectionVM(SyndicationFeedRoot root)
         {
             this.root = root;
-            CheckAndAddCommand = new SimpleCommand(OnCheckAndAdd);
-            CloseCommand = new SimpleCommand(OnClose);
-            Execution = executionLifetime.Task;
         }
 
         readonly SyndicationFeedRoot root;
-
-        TaskCompletionSource<long?> executionLifetime = new TaskCompletionSource<long?>();
-
-        public Task<long?> Execution { get; }
 
         string name;
         public string Name
@@ -30,17 +23,7 @@ namespace SyndicationFeed.Client.VM
             set => Set(ref name, value);
         }
 
-        string error;
-        public string Error
-        {
-            get => error;
-            set => Set(ref error, value);
-        }
-
-        public SimpleCommand CheckAndAddCommand { get; }
-        public SimpleCommand CloseCommand { get; }
-
-        async void OnCheckAndAdd()
+        protected async override void OnCheckAndAdd()
         {
             Error = null;
             if (string.IsNullOrWhiteSpace(Name))
@@ -60,11 +43,6 @@ namespace SyndicationFeed.Client.VM
                 // TODO: catch concrete exception
                 Error = "Couldn't add collection: " + ex.Message;
             }
-        }
-
-        void OnClose()
-        {
-            executionLifetime.SetResult(null);
         }
     }
 }

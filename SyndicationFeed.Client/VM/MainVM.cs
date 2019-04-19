@@ -105,7 +105,11 @@ namespace SyndicationFeed.Client.VM
             set
             {
                 if (Set(ref currentCollection, value))
+                {
                     RemoveCurrentCollectionCommand.AllowExecute = (value != null);
+                    if (value != null)
+                        value.LoadFeeds();
+                }
             }
         }
 

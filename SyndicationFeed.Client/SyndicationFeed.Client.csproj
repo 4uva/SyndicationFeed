@@ -56,6 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\AddFeedControl.xaml.cs">
+      <DependentUpon>AddFeedControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AddCollectionControl.xaml.cs">
       <DependentUpon>AddCollectionControl.xaml</DependentUpon>
     </Compile>
@@ -71,12 +74,18 @@
       <DependentUpon>UserManagementWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="VM\AddCollectionVM.cs" />
+    <Compile Include="VM\AddCommonVM.cs" />
+    <Compile Include="VM\AddFeedVM.cs" />
     <Compile Include="VM\CollectionVM.cs" />
     <Compile Include="VM\FeedVM.cs" />
     <Compile Include="VM\MainVM.cs" />
     <Compile Include="VM\SimpleCommand.cs" />
     <Compile Include="VM\UserVM.cs" />
     <Compile Include="VM\VM.cs" />
+    <Page Include="View\AddFeedControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\AddCollectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

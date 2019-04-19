@@ -8,10 +8,14 @@
              d:DataContext="{d:DesignInstance Type=vm:CollectionVM, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <view:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -30,9 +34,13 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
+        <!-- add feed -->
+        <view:AddFeedControl DataContext="{Binding AddFeed}" Grid.Row="2"
+                             Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"/>
 
         <!-- feed operations -->
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="10">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" Margin="10">
             <Button Command="{Binding AddFeedCommand}" MinWidth="50" Margin="0,0,10,0">New</Button>
             <Button Command="{Binding RemoveCurrentFeedCommand}" MinWidth="50">Delete</Button>
         </StackPanel>
