@@ -54,5 +54,11 @@ namespace SyndicationFeed.Client.View
                 passwordIsChangingByUser = false;
             }
         }
+
+        void CheckEsc(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                Close();
+        }
     }
 }

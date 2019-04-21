@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SyndicationFeed.Client.View"
         mc:Ignorable="d"
         Title="User management" SizeToContent="Height"
-        Width="400" MinWidth="200">
+        Width="400" MinWidth="200" PreviewKeyDown="CheckEsc">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -61,7 +61,7 @@
         <StackPanel Orientation="Horizontal"
                     Grid.Row="3" Grid.ColumnSpan="2"
                     HorizontalAlignment="Right">
-            <Button Command="{Binding LoginCommand}" MinWidth="75"
+            <Button Command="{Binding LoginCommand}" MinWidth="75" IsDefault="True"
                     Margin="10,10,0,0">Log in</Button>
             <Button Command="{Binding RegisterCommand}" MinWidth="75"
                     Margin="10,10,0,0">Register</Button>
