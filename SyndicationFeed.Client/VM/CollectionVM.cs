@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,8 +28,22 @@ namespace SyndicationFeed.Client.VM
         {
             if (Feeds != null)
                 return; // already loaded
-            var ids = await modelCollection.GetFeedIds();
-            Feeds = ids.Select(id => new FeedVM(modelCollection, id)).ToList();
+            try
+            {
+                IsLoading = true;
+                Error = null;
+                var ids = await modelCollection.GetFeedIds();
+                var feeds = ids.Select(id => new FeedVM(modelCollection, id));
+                Feeds = new ObservableCollection<FeedVM>(feeds);
+            }
+            catch (Exception ex)
+            {
+                Error = "Cannot load collection";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         public void UnloadFeeds()
@@ -36,14 +51,28 @@ namespace SyndicationFeed.Client.VM
             Feeds = null;
         }
 
-        List<FeedVM> feeds;
-        public List<FeedVM> Feeds
+        bool isLoading;
+        public bool IsLoading
+        {
+            get => isLoading;
+            private set => Set(ref isLoading, value);
+        }
+
+        string error;
+        public string Error
+        {
+            get => error;
+            set => Set(ref error, value);
+        }
+
+        ObservableCollection<FeedVM> feeds;
+        public ObservableCollection<FeedVM> Feeds
         {
             get => feeds;
             private set
             {
                 if (Set(ref feeds, value))
-                    FeedCount = value?.Count ?? 0;
+                    FeedCount = feeds?.Count ?? 0;
             }
         }
 
@@ -61,7 +90,7 @@ namespace SyndicationFeed.Client.VM
             set
             {
                 if (Set(ref currentFeed, value))
-                    RemoveCurrentFeedCommand.AllowExecute = (value != null);
+                    RemoveCurrentFeedCommand.AllowExecute = (currentFeed != null);
             }
         }
 
@@ -83,6 +112,7 @@ namespace SyndicationFeed.Client.VM
                 {
                     var newFeed = new FeedVM(modelCollection, id.Value);
                     Feeds.Add(newFeed);
+                    FeedCount++;
                     CurrentFeed = newFeed;
                 }
             }
@@ -104,6 +134,7 @@ namespace SyndicationFeed.Client.VM
                 await CurrentFeed.RemoveItself(modelCollection);
                 var feedToBeDeleted = CurrentFeed;
                 CurrentFeed = null;
+                FeedCount--;
                 Feeds.Remove(feedToBeDeleted);
             }
             finally

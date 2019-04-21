@@ -9,40 +9,48 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
+        <view:ExtendedBooleanToVisibilityConverter x:Key="ExtendedBooleanToVisibilityConverter"/>
         <view:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <TextBlock Visibility="{Binding IsLoading, Converter={StaticResource ExtendedBooleanToVisibilityConverter}}">
+            Loading...
+        </TextBlock>
+        <TextBlock Visibility="{Binding Error, Converter={StaticResource NullToVisibilityConverter}}" Text="{Binding Error}"/>
+        <Grid Visibility="{Binding IsLoading, Converter={StaticResource ExtendedBooleanToVisibilityConverter}, ConverterParameter=invert}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <!-- collections header -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBlock Text="Feeds ("/>
-            <TextBlock Text="{Binding FeedCount}"/>
-            <TextBlock Text=")"/>
-        </StackPanel>
+            <!-- collections header -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Text="Feeds ("/>
+                <TextBlock Text="{Binding FeedCount}"/>
+                <TextBlock Text=")"/>
+            </StackPanel>
 
-        <!-- feed items -->
-        <ListView ItemsSource="{Binding Feeds}" Grid.Row="1" SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>Feed</TextBlock>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            <!-- feed items -->
+            <ListView ItemsSource="{Binding Feeds}" Grid.Row="1" SelectionMode="Single"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <view:SimpleFeedViewControl/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         
-        <!-- add feed -->
-        <view:AddFeedControl DataContext="{Binding AddFeed}" Grid.Row="2"
-                             Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"/>
+            <!-- add feed -->
+            <view:AddFeedControl DataContext="{Binding AddFeed}" Grid.Row="2"
+                                 Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"/>
 
-        <!-- feed operations -->
-        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" Margin="10">
-            <Button Command="{Binding AddFeedCommand}" MinWidth="50" Margin="0,0,10,0">New</Button>
-            <Button Command="{Binding RemoveCurrentFeedCommand}" MinWidth="50">Delete</Button>
-        </StackPanel>
+            <!-- feed operations -->
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" Margin="10">
+                <Button Command="{Binding AddFeedCommand}" MinWidth="50" Margin="0,0,10,0">New</Button>
+                <Button Command="{Binding RemoveCurrentFeedCommand}" MinWidth="50">Delete</Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
