@@ -33,7 +33,8 @@
             </StackPanel>
 
             <!-- feed items -->
-            <ListView ItemsSource="{Binding Feeds}" Grid.Row="1" SelectionMode="Single"
+            <ListView ItemsSource="{Binding Feeds}" SelectedItem="{Binding CurrentFeed}"
+                      Grid.Row="1" SelectionMode="Single"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemTemplate>
                     <DataTemplate>
