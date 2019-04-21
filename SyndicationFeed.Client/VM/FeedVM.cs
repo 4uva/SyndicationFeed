@@ -19,6 +19,8 @@ namespace SyndicationFeed.Client.VM
         long id;
         Feed feed;
 
+        public Uri SourceAddress => feed?.SourceAddress;
+
         bool isLoading;
         public bool IsLoading
         {

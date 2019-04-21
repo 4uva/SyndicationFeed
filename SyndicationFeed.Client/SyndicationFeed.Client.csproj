@@ -66,6 +66,9 @@
       <DependentUpon>CollectionViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converters\ExtendedBooleanToVisibilityConverter.cs" />
+    <Compile Include="View\FeedViewWindow.xaml.cs">
+      <DependentUpon>FeedViewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LeftColumnContent.xaml.cs">
       <DependentUpon>LeftColumnContent.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CollectionViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FeedViewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
