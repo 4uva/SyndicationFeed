@@ -70,6 +70,9 @@
       <DependentUpon>LeftColumnContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NullToVisibilityConverter.cs" />
+    <Compile Include="View\SimpleFeedViewControl.xaml.cs">
+      <DependentUpon>SimpleFeedViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserManagementWindow.xaml.cs">
       <DependentUpon>UserManagementWindow.xaml</DependentUpon>
     </Compile>
@@ -79,6 +82,7 @@
     <Compile Include="VM\CollectionVM.cs" />
     <Compile Include="VM\FeedVM.cs" />
     <Compile Include="VM\MainVM.cs" />
+    <Compile Include="VM\PublicationVM.cs" />
     <Compile Include="VM\SimpleCommand.cs" />
     <Compile Include="VM\UserVM.cs" />
     <Compile Include="VM\VM.cs" />
@@ -110,6 +114,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\SimpleFeedViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserManagementWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
