@@ -19,11 +19,12 @@
         <TextBlock Visibility="{Binding Error, Converter={StaticResource NullToVisibilityConverter}}" Text="{Binding Error}"/>
         <TextBlock Visibility="{Binding IsLoading, Converter={StaticResource ExtendedBooleanToVisibilityConverter}, ConverterParameter=invert}"
                    TextWrapping="Wrap">
-            <Run Text="{Binding PublicationCount, StringFormat='[Total {0}]', Mode=OneWay}"/>
+            <Run Text="{Binding PublicationCount, StringFormat='[Total {0} feeds]', Mode=OneWay}"/>
             <!-- show first three publications -->
             <Run Text="{Binding Publications[0].Title, Mode=OneWay}"/>
             <Run Text="{Binding Publications[1].Title, Mode=OneWay, StringFormat='/ {0}'}"/>
             <Run Text="{Binding Publications[2].Title, Mode=OneWay, StringFormat='/ {0}'}"/>
+            <Hyperlink>View whole feed</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>
