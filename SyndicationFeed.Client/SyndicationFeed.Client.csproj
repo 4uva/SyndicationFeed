@@ -65,11 +65,11 @@
     <Compile Include="View\CollectionViewControl.xaml.cs">
       <DependentUpon>CollectionViewControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ExtendedBooleanToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\ExtendedBooleanToVisibilityConverter.cs" />
     <Compile Include="View\LeftColumnContent.xaml.cs">
       <DependentUpon>LeftColumnContent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NullToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\NullToVisibilityConverter.cs" />
     <Compile Include="View\SimpleFeedViewControl.xaml.cs">
       <DependentUpon>SimpleFeedViewControl.xaml</DependentUpon>
     </Compile>
