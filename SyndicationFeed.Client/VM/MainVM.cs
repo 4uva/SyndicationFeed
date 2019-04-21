@@ -87,7 +87,7 @@ namespace SyndicationFeed.Client.VM
             private set
             {
                 if (Set(ref collections, value))
-                    CollectionCount = value?.Count ?? 0;
+                    CollectionCount = collections?.Count ?? 0;
             }
         }
 
@@ -106,9 +106,11 @@ namespace SyndicationFeed.Client.VM
             {
                 if (Set(ref currentCollection, value))
                 {
-                    RemoveCurrentCollectionCommand.AllowExecute = (value != null);
-                    if (value != null)
-                        value.LoadFeeds();
+                    RemoveCurrentCollectionCommand.AllowExecute = (currentCollection != null);
+                    if (currentCollection != null)
+                    {
+                        _ = currentCollection.LoadFeeds();
+                    }
                 }
             }
         }
