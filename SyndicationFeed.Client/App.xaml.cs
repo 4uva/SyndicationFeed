@@ -14,7 +14,7 @@ namespace SyndicationFeed.Client
 {
     public partial class App : Application
     {
-        protected override async void OnStartup(StartupEventArgs args)
+        protected override void OnStartup(StartupEventArgs args)
         {
             base.OnStartup(args);
 
@@ -29,13 +29,8 @@ namespace SyndicationFeed.Client
                 DataContext = mainVM
             };
 
-            var tcs = new TaskCompletionSource<object>();
-            mainWindow.Loaded += (e2, args2) => tcs.TrySetResult(null);
+            mainWindow.Loaded += (e2, args2) => ShowAuthenticationDialog();
             mainWindow.Show();
-            await tcs.Task;
-
-            // needs to be called after main window is shown
-            ShowAuthenticationDialog();
         }
 
         public void ShowAuthenticationDialog()
