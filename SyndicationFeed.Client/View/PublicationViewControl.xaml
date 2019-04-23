@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="SyndicationFeed.Client.View.PublicationViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyndicationFeed.Client.VM"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:view="clr-namespace:SyndicationFeed.Client.View"
+             d:DataContext="{d:DesignInstance Type=vm:PublicationVM, IsDesignTimeCreatable=False}"
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="600">
+    <Grid Margin="0,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontWeight="Bold" Grid.Row="0">
+            <Run Text="{Binding Title, Mode=OneWay}"/>
+            <Run Text="(at "/><Run Text="{Binding PublishTime, Mode=OneWay}"/><Run Text=")"/>
+        </TextBlock>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Summary}"/>
+    </Grid>
+</UserControl>

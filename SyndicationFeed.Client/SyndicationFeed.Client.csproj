@@ -73,6 +73,9 @@
       <DependentUpon>LeftColumnContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="View\PublicationViewControl.xaml.cs">
+      <DependentUpon>PublicationViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SimpleFeedViewControl.xaml.cs">
       <DependentUpon>SimpleFeedViewControl.xaml</DependentUpon>
     </Compile>
@@ -121,6 +124,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\PublicationViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SimpleFeedViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
