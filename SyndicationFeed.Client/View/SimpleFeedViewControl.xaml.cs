@@ -21,5 +21,15 @@ namespace SyndicationFeed.Client.View
         {
             InitializeComponent();
         }
+
+        void OnViewFeed(object sender, RoutedEventArgs e)
+        {
+            var window = new FeedViewWindow()
+            {
+                DataContext = DataContext,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            window.ShowDialog();
+        }
     }
 }
