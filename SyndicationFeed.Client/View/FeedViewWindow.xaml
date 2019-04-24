@@ -18,7 +18,7 @@
         <view:ExtendedBooleanToVisibilityConverter x:Key="ExtendedBooleanToVisibilityConverter"/>
         <view:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="10">
         <!-- if loading... -->
         <TextBlock Visibility="{Binding IsLoading, Converter={StaticResource ExtendedBooleanToVisibilityConverter}}"
                    VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -33,16 +33,17 @@
             </TextBlock>
             
             <!-- else (normal case) -->
-            <ListBox Visibility="{Binding Error, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=invert}"
-                     ItemsSource="{Binding Publications}"
-                     ScrollViewer.CanContentScroll="False"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <view:PublicationViewControl/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl
+                    Visibility="{Binding Error, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=invert}"
+                    ItemsSource="{Binding Publications}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <view:PublicationViewControl/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Window>
