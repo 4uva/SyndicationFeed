@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,12 @@ namespace SyndicationFeed.Client.View
         public PublicationViewControl()
         {
             InitializeComponent();
+        }
+
+        void OnHyperlinkClick(object sender, RequestNavigateEventArgs e)
+        {
+            var hyperlink = e.Uri;
+            Task.Run(() => Process.Start(hyperlink.ToString()));
         }
     }
 }

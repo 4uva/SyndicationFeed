@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:view="clr-namespace:SyndicationFeed.Client.View"
+             xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              d:DataContext="{d:DesignInstance Type=vm:PublicationVM, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="600">
@@ -12,11 +13,18 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock FontWeight="Bold" Grid.Row="0">
             <Run Text="{Binding Title, Mode=OneWay}"/>
             <Run Text="(at "/><Run Text="{Binding PublishTime, Mode=OneWay}"/><Run Text=")"/>
         </TextBlock>
-        <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Summary}"/>
+        <TextBlock Grid.Row="1">
+            <Run Text="Original address:"/>
+            <Hyperlink RequestNavigate="OnHyperlinkClick" NavigateUri="{Binding Link}">
+                <Run Text="{Binding Link, Mode=OneWay}"/>
+            </Hyperlink>
+        </TextBlock>
+        <html:HtmlPanel Text="{Binding Summary}" Grid.Row="2"/>
     </Grid>
 </UserControl>
