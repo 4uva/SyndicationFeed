@@ -84,6 +84,7 @@ namespace SyndicationFeed
             });
         }
 
+        // to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
