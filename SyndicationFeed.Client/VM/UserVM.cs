@@ -128,7 +128,7 @@ namespace SyndicationFeed.Client.VM
             {
                 Status = "Registering...";
                 await userManagement.Register(
-                    new RegisterInfo() { UserName = UserName, Password = Password });
+                    new UserInfo() { UserName = UserName, Password = Password });
                 Status = "Successfully registered, logging in...";
                 await PerformLogin();
             }

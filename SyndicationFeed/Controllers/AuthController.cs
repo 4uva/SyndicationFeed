@@ -31,7 +31,7 @@ namespace SyndicationFeed.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterInfo info)
+        public async Task<IActionResult> Register([FromBody] UserInfo info)
         {
             logger.LogInformation("Registering new user {user}", info.UserName);
             var user = new IdentityUser { UserName = info.UserName };

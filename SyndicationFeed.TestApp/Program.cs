@@ -21,7 +21,7 @@ namespace SyndicationFeed.TestApp
             if (needRegistration)
             {
                 await mgmt.Register(
-                    new RegisterInfo() { UserName = userName, Password = password });
+                    new UserInfo() { UserName = userName, Password = password });
             }
 
             var root = mgmt.Login(userName, password);

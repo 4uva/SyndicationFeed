@@ -38,7 +38,7 @@ namespace SyndicationFeed.SDK
             helper.DropAuthorization();
         }
 
-        public async Task Register(RegisterInfo info)
+        public async Task Register(UserInfo info)
         {
             try
             {

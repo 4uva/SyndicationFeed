@@ -31,7 +31,7 @@ namespace SyndicationFeed.IntegrationTests
         public async Task InitializeAsync()
         {
             await mgmt.Register(
-                new RegisterInfo() { UserName = userName, Password = password });
+                new UserInfo() { UserName = userName, Password = password });
             root = mgmt.Login(userName, password);
         }
 

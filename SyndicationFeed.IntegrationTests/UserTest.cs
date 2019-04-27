@@ -44,7 +44,7 @@ namespace SyndicationFeed.IntegrationTests
             var client = factory.CreateClient();
             var mgmt = new UserManagement(client);
             await mgmt.Register(
-                new RegisterInfo() { UserName = u1, Password = p1 });
+                new UserInfo() { UserName = u1, Password = p1 });
             var root = mgmt.Login(u1, p1);
             var colls = await root.GetAllCollections();
             Assert.Empty(colls);
@@ -59,11 +59,11 @@ namespace SyndicationFeed.IntegrationTests
             var u1 = "unittest user 1";
             var p1 = "*";
             await mgmt.Register(
-                new RegisterInfo() { UserName = u1, Password = p1 });
+                new UserInfo() { UserName = u1, Password = p1 });
             var u2 = "unittest user 2";
             var p2 = "*";
             await mgmt.Register(
-                new RegisterInfo() { UserName = u2, Password = p2 });
+                new UserInfo() { UserName = u2, Password = p2 });
 
             var rootOfUser1 = mgmt.Login(u1, p1);
             await rootOfUser1.AddCollection("test");
