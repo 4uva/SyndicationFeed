@@ -1,1 +1,12 @@
 [ ] Add roles (admin,  user)
+  [ ] Server: Determine additional admin rights
+  [ ] Server: Add controllers/controller actions for admins
+  [ ] SDK: Add admin functionality into
+  [ ] Tests: Add integration tests for roles
+  [ ] Sample app: Add sample code
+  [ ] Client: extend WPF client with admin functions
+[ ] Client: explicitly inform user about password mismatch
+[ ] Password reset
+[ ] Suspension (and restoring)
+[ ] Server/client: warn about weak passowrd
+[ ] Feed blacklist?  
