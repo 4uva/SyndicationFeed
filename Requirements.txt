@@ -19,9 +19,6 @@ Necessary functions:
 [x] Get all news for a collection
 [x] Caching of feed data
 [x] A simple (console or GUI) test application to show API interaction
-
-Plus will be:
-
 [x] C#/.net client SDK
 [x] Authentication
 [x] Persistence
